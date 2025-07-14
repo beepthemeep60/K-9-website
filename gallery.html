@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gallery - K-9</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="main.css" />
+  <link rel="stylesheet" href="navbar.css" />
+  <style>
+    body {
+      background-color: #8a8a8a;
+      color: white;
+      margin: 0;
+      font-family: sans-serif;
+    }
+
+    .navbar {
+      margin-bottom: 20px;
+    }
+
+    .user-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .user-button {
+      background-color: #333;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .user-button:hover {
+      background-color: #555;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    h1 {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <section class="container">
+
+    <div class="content">
+      <!-- Include your navbar -->
+      <div class="navbar">
+        <div class="dropdown">
+          <button class="dropbtn">
+            Navigation &#x25BC;
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a onclick="location.href='./index.html'" href="#home">Home</a>
+            <a onclick="location.href='./Support.html'" href="#support">Support</a>
+            <a onclick="location.href='./Request.html'" href="#request">Feature request</a>
+            <a onclick="location.href='./Appeal.html'" href="#appeal">Ban appeals</a>
+            <a onclick="location.href='./Report.html'" href="#report">Reports</a>
+            <a onclick="location.href='./gallery.html'" href="#gallery">Gallery</a>
+          </div>
+        </div>
+      </div>
+
+              <div class="main">
+          <div class="strokeme" style="display: flex">
+            <div style="margin: auto" ;>
+      <h1>Community Art Gallery</h1>
+      <h4>If I have missed anything please let me know :)</h4>
+</div>
+          </div>
+        </div>
+      <div class="user-buttons" id="userButtons"></div>
+      <div class="gallery" id="galleryContainer"></div>
+    </div>
+  </section>
+
+<script>
+  const users = ['duck.iie', 'back.ally_raccoon', 'vespidae', 'rynix', 'the1_foxy', 'happygirlskykid'];
+  const userButtonsContainer = document.getElementById('userButtons');
+  const galleryContainer = document.getElementById('galleryContainer');
+
+  let currentRequestId = 0; // Track gallery load requests
+
+  // Create a button for each user
+  users.forEach(username => {
+    const button = document.createElement('button');
+    button.textContent = username;
+    button.className = 'user-button';
+    button.onclick = () => loadUserGallery(username);
+    userButtonsContainer.appendChild(button);
+  });
+
+  function loadUserGallery(username) {
+    const requestId = ++currentRequestId; // Increment and store the current request
+    galleryContainer.innerHTML = ''; // Clear current gallery
+
+    const folderPath = `/assets/gallery/${username}/`;
+    const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    const maxImages = 50;
+
+    for (let i = 1; i <= maxImages; i++) {
+      imageExtensions.forEach(ext => {
+        const img = new Image();
+        img.src = `${folderPath}image${i}.${ext}`;
+        img.onload = () => {
+          if (requestId === currentRequestId) {
+            galleryContainer.appendChild(img);
+          }
+        };
+        img.onerror = () => {}; // Optional: handle broken/missing images
+      });
+    }
+  }
+</script>
+</body>
+</html>
